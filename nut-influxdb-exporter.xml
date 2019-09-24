@@ -33,6 +33,11 @@
       <Mode/>
     </Variable>
     <Variable>
+      <Value>1500</Value>
+      <Name>WATTS</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
       <Value>127.0.0.1</Value>
       <Name>INFLUXDB_HOST</Name>
       <Mode/>
@@ -85,12 +90,13 @@
   </Environment>
   <Labels/>
   <Config Name="HOSTNAME" Target="HOSTNAME" Default="unraid" Mode="" Description="host you want the measurements to show up as in InfluxDB" Type="Variable" Display="always" Required="true" Mask="false">unraid-ups</Config>
+  <Config Name="WATTS" Target="WATTS" Default="" Mode="" Description="If your UPS doesn't have the nominal power metric then specify the rated watts so that the load percentage can be used to calculate the current watts" Type="Variable" Display="always" Required="false" Mask="false">1500</Config>
   <Config Name="INFLUXDB_HOST" Target="INFLUXDB_HOST" Default="localhost" Mode="" Description="IP address of influxdb" Type="Variable" Display="always" Required="true" Mask="false">127.0.0.1</Config>
   <Config Name="INFLUXDB_PORT" Target="INFLUXDB_PORT" Default="8086" Mode="" Description="Container Variable: INFLUXDB_PORT" Type="Variable" Display="advanced" Required="true" Mask="false">8086</Config>
   <Config Name="INFLUXDB_DATABASE" Target="INFLUXDB_DATABASE" Default="nut" Mode="" Description="InfluxDB database name to store the values" Type="Variable" Display="advanced" Required="true" Mask="false">nut</Config>
   <Config Name="INFLUXDB_USER" Target="INFLUXDB_USER" Default="" Mode="" Description="User name for Influxdb" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
   <Config Name="INFLUXDB_PASSWORD" Target="INFLUXDB_PASSWORD" Default="" Mode="" Description="Password for Influxdb" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
-  <Config Name="NUT_HOST" Target="NUT_HOST" Default="" Mode="" Description="NUT hostname" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
+  <Config Name="NUT_HOST" Target="NUT_HOST" Default="127.0.0.1" Mode="" Description="NUT hostname" Type="Variable" Display="advanced" Required="true" Mask="false">127.0.0.1</Config>
   <Config Name="NUT_PORT" Target="NUT_PORT" Default="" Mode="" Description="NUT Port" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
   <Config Name="NUT_USERNAME" Target="NUT_USERNAME" Default="" Mode="" Description="Username for NUT" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
   <Config Name="NUT_PASSWORD" Target="NUT_PASSWORD" Default="" Mode="" Description="Password for NUT" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>

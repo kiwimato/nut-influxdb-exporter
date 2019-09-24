@@ -17,13 +17,13 @@ nut_host = os.getenv('NUT_HOST', '127.0.0.1')
 nut_port = os.getenv('NUT_PORT') if os.getenv('NUT_PORT') != '' else '3493'
 nut_password = os.getenv('NUT_PASSWORD') if os.getenv('NUT_PASSWORD') != '' else None
 nut_username = os.getenv('NUT_USERNAME') if os.getenv('NUT_USERNAME') != '' else None
+nut_watts = os.getenv('WATTS') if os.getenv('WATTS') != '' else None
 # Other vars
 interval = float(os.getenv('INTERVAL', 21))
 ups_alias = os.getenv('UPS_ALIAS', 'UPS')
 verbose = os.getenv('VERBOSE', 'false').lower()
 remove_keys = ['driver.version.internal', 'driver.version.usb', 'ups.beeper.status', 'driver.name', 'battery.mfr.date']
 tag_keys = ['battery.type', 'device.model', 'device.serial', 'driver.version', 'driver.version.data', 'device.mfr', 'device.type', 'ups.mfr', 'ups.model', 'ups.productid', 'ups.serial', 'ups.vendorid']
-
 
 print("Connecting to InfluxDB host:{}, DB:{}".format(host, dbname))
 client = InfluxDBClient(host, port, username, password, dbname)
@@ -80,6 +80,9 @@ def construct_object(data, remove_keys, tag_keys):
                 tags[k] = v
             else:
                 fields[k] = convert_to_type(v)
+
+    watts = nut_watts if nut_watts else fields['ups.realpower.nominal']
+    fields['watts'] = watts * 0.01 * fields['ups.load']
 
     result = [
         {
