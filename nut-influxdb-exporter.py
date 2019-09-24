@@ -34,17 +34,19 @@ if client:
 if os.getenv('VERBOSE', 'false').lower() == 'true':
     print("INFLUXDB_DATABASE: ", dbname)
     print("INFLUXDB_USER: ", username)
-    print("INFLUXDB_PASSWORD: ", password) # Not really safe to just print it. Feel free to uncomment this if you really need it
+    # print("INFLUXDB_PASSWORD: ", password)    # Not really safe to just print it. Feel free to uncomment this if you really need it
     print("INFLUXDB_PORT: ", port)
     print("INFLUXDB_HOST: ", host)
     print("NUT_USER: ", nut_username)
-    print("NUT_PASS: ", nut_password)
+    # print("NUT_PASS: ", nut_password)
     print("UPS_ALIAS", ups_alias)
     print("INTERVAL: ", interval)
     print("VERBOSE: ", verbose)
 
 print("Connecting to NUT host {}:{}".format(nut_host, nut_port))
 ups_client = PyNUTClient(host=nut_host, port=nut_port, login=nut_username, password=nut_password, debug=(verbose == 'true'))
+if ups_client:
+    print("Connected successfully to NUT")
 
 
 def convert_to_type(s):
@@ -64,9 +66,9 @@ def construct_object(data, remove_keys, tag_keys):
     """
     Constructs NUT data into  an object that can be sent directly to InfluxDB
 
-    :param data: data received from
-    :param remove_keys:
-    :param tag_keys:
+    :param data: data received from NUT
+    :param remove_keys: some keys which are considered superfluous
+    :param tag_keys: some keys that are actually considered tags and not measurements
     :return:
     """
     fields = {}
