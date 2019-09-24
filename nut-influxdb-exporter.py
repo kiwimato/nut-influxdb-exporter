@@ -15,8 +15,8 @@ port = os.getenv('INFLUXDB_PORT', 8086)
 # NUT related variables
 nut_host = os.getenv('NUT_HOST', '127.0.0.1')
 nut_port = os.getenv('NUT_PORT', '3493')
-nut_username = os.getenv('NUT_PASSWORD', None)
-nut_password = os.getenv('NUT_USERNAME', None)
+nut_username = os.getenv('NUT_PASSWORD') if os.getenv('NUT_PASSWORD') != '' else None
+nut_password = os.getenv('NUT_USERNAME') if os.getenv('NUT_USERNAME') != '' else None
 # Other vars
 interval = float(os.getenv('INTERVAL', 21))
 ups_alias = os.getenv('UPS_ALIAS', 'UPS')
