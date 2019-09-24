@@ -14,9 +14,9 @@ host = os.getenv('INFLUXDB_HOST', '127.0.0.1')
 port = os.getenv('INFLUXDB_PORT', 8086)
 # NUT related variables
 nut_host = os.getenv('NUT_HOST', '127.0.0.1')
-nut_port = os.getenv('NUT_PORT', '3493')
-nut_username = os.getenv('NUT_PASSWORD') if os.getenv('NUT_PASSWORD') != '' else None
-nut_password = os.getenv('NUT_USERNAME') if os.getenv('NUT_USERNAME') != '' else None
+nut_port = os.getenv('NUT_PORT') if os.getenv('NUT_PORT') != '' else '3493'
+nut_password = os.getenv('NUT_PASSWORD') if os.getenv('NUT_PASSWORD') != '' else None
+nut_username = os.getenv('NUT_USERNAME') if os.getenv('NUT_USERNAME') != '' else None
 # Other vars
 interval = float(os.getenv('INTERVAL', 21))
 ups_alias = os.getenv('UPS_ALIAS', 'UPS')
@@ -31,17 +31,20 @@ client.create_database(dbname)
 if client:
     print("Connected successfully to InfluxDB")
 
-ups_client = PyNUTClient(host=nut_host, port=nut_port, login=nut_username, password=nut_password)
-
 if os.getenv('VERBOSE', 'false').lower() == 'true':
     print("INFLUXDB_DATABASE: ", dbname)
     print("INFLUXDB_USER: ", username)
-    # print("INFLUXDB_PASSWORD: ", password) # Not really safe to just print it. Feel free to uncomment this if you really need it
+    print("INFLUXDB_PASSWORD: ", password) # Not really safe to just print it. Feel free to uncomment this if you really need it
     print("INFLUXDB_PORT: ", port)
     print("INFLUXDB_HOST: ", host)
+    print("NUT_USER: ", nut_username)
+    print("NUT_PASS: ", nut_password)
     print("UPS_ALIAS", ups_alias)
     print("INTERVAL: ", interval)
     print("VERBOSE: ", verbose)
+
+print("Connecting to NUT host {}:{}".format(nut_host, nut_port))
+ups_client = PyNUTClient(host=nut_host, port=nut_port, login=nut_username, password=nut_password, debug=(verbose == 'true'))
 
 
 def convert_to_type(s):
