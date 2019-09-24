@@ -21,20 +21,22 @@ nut_password = os.getenv('NUT_USERNAME', None)
 interval = float(os.getenv('INTERVAL', 21))
 ups_alias = os.getenv('UPS_ALIAS', 'UPS')
 verbose = os.getenv('VERBOSE', 'false').lower()
-remove_these_keys = ['driver.version.internal', 'driver.version.usb', 'ups.beeper.status', 'driver.name', 'battery.mfr.date']
+remove_keys = ['driver.version.internal', 'driver.version.usb', 'ups.beeper.status', 'driver.name', 'battery.mfr.date']
 tag_keys = ['battery.type', 'device.model', 'device.serial', 'driver.version', 'driver.version.data', 'device.mfr', 'device.type', 'ups.mfr', 'ups.model', 'ups.productid', 'ups.serial', 'ups.vendorid']
 
-print("Connecting to InfluxDB host:{}, DB:{}".format(host, dbname))
 
+print("Connecting to InfluxDB host:{}, DB:{}".format(host, dbname))
 client = InfluxDBClient(host, port, username, password, dbname)
 client.create_database(dbname)
+if client:
+    print("Connected successfully to InfluxDB")
 
 ups_client = PyNUTClient(host=nut_host, port=nut_port, login=nut_username, password=nut_password)
 
 if os.getenv('VERBOSE', 'false').lower() == 'true':
     print("INFLUXDB_DATABASE: ", dbname)
     print("INFLUXDB_USER: ", username)
-    # print("INFLUXDB_PASSWORD: ", password) # Not really safe to just print it.
+    # print("INFLUXDB_PASSWORD: ", password) # Not really safe to just print it. Feel free to uncomment this if you really need it
     print("INFLUXDB_PORT: ", port)
     print("INFLUXDB_HOST: ", host)
     print("UPS_ALIAS", ups_alias)
@@ -55,12 +57,12 @@ def convert_to_type(s):
             return s
 
 
-def construct_object(data, remove_these_keys, tag_keys):
+def construct_object(data, remove_keys, tag_keys):
     """
     Constructs NUT data into  an object that can be sent directly to InfluxDB
 
     :param data: data received from
-    :param remove_these_keys:
+    :param remove_keys:
     :param tag_keys:
     :return:
     """
@@ -68,7 +70,7 @@ def construct_object(data, remove_these_keys, tag_keys):
     tags = {'host': os.getenv('HOSTNAME', 'localhost')}
 
     for k, v in data.items():
-        if k not in remove_these_keys:
+        if k not in remove_keys:
             if k in tag_keys:
                 tags[k] = v
             else:
@@ -84,6 +86,7 @@ def construct_object(data, remove_these_keys, tag_keys):
     return result
 
 
+# Main infinite loop: Get the data from NUT every interval and send it to InfluxDB.
 while True:
     try:
         ups_data = ups_client.list_vars(ups_alias)
@@ -93,7 +96,7 @@ while True:
             print(tb)
         print("Error getting data from NUT")
 
-    json_body = construct_object(ups_data, remove_these_keys, tag_keys)
+    json_body = construct_object(ups_data, remove_keys, tag_keys)
 
     try:
         if verbose == 'true':
