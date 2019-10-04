@@ -81,7 +81,7 @@ def construct_object(data, remove_keys, tag_keys):
             else:
                 fields[k] = convert_to_type(v)
 
-    watts = nut_watts if nut_watts else fields['ups.realpower.nominal']
+    watts = float(nut_watts) if nut_watts else float(fields['ups.realpower.nominal'])
     fields['watts'] = watts * 0.01 * fields['ups.load']
 
     result = [
