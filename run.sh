@@ -1,6 +1,6 @@
 #!/bin/bash
-while:;
+while :
 do 
-sleep 10s
-python -u /src/nut-influxdb-exporter.py
+	sleep 10s
+	python -u /src/nut-influxdb-exporter.py
 done
