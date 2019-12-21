@@ -46,11 +46,12 @@
       <Value>ups</Value>
       <Name>NUT_ALIAS</Name>
       <Mode/>
-    <Variable>
+    </Variable>
     <Variable>
       <Value>127.0.0.1</Value>
       <Name>NUT_HOST</Name>
       <Mode/>
+    </Variable>
     <Variable>
       <Value/>
       <Name>NUT_PORT</Name>
@@ -85,7 +86,6 @@
       <Value/>
       <Name>INFLUXDB_PASSWORD</Name>
       <Mode/>
-    </Variable>
     </Variable>
     <Variable>
       <Value>false</Value>
