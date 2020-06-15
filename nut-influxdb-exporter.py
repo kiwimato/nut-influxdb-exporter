@@ -103,6 +103,7 @@ while True:
         if verbose == 'true':
             print(tb)
         print("Error getting data from NUT")
+        exit(1)
 
     json_body = construct_object(ups_data, remove_keys, tag_keys)
 
@@ -117,4 +118,5 @@ while True:
         if verbose == 'true':
             print(tb)
         print("Error connecting to InfluxDB.")
+        exit(2)
     time.sleep(interval)
