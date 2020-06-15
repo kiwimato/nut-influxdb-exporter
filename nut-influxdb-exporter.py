@@ -20,7 +20,7 @@ nut_username = os.getenv('NUT_USERNAME') if os.getenv('NUT_USERNAME') != '' else
 nut_watts = os.getenv('WATTS') if os.getenv('WATTS') != '' else None
 # Other vars
 interval = float(os.getenv('INTERVAL', 21))
-ups_alias = os.getenv('UPS_ALIAS', 'UPS')
+ups_name = os.getenv('UPS_NAME', 'UPS')
 verbose = os.getenv('VERBOSE', 'false').lower()
 remove_keys = ['driver.version.internal', 'driver.version.usb', 'ups.beeper.status', 'driver.name', 'battery.mfr.date']
 tag_keys = ['battery.type', 'device.model', 'device.serial', 'driver.version', 'driver.version.data', 'device.mfr', 'device.type', 'ups.mfr', 'ups.model', 'ups.productid', 'ups.serial', 'ups.vendorid']
@@ -39,7 +39,7 @@ if os.getenv('VERBOSE', 'false').lower() == 'true':
     print("INFLUXDB_HOST: ", host)
     print("NUT_USER: ", nut_username)
     # print("NUT_PASS: ", nut_password)
-    print("UPS_ALIAS", ups_alias)
+    print("UPS_NAME", ups_name)
     print("INTERVAL: ", interval)
     print("VERBOSE: ", verbose)
 
@@ -97,7 +97,7 @@ def construct_object(data, remove_keys, tag_keys):
 # Main infinite loop: Get the data from NUT every interval and send it to InfluxDB.
 while True:
     try:
-        ups_data = ups_client.list_vars(ups_alias)
+        ups_data = ups_client.list_vars(ups_name)
     except:
         tb = traceback.format_exc()
         if verbose == 'true':

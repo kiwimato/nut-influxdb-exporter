@@ -44,7 +44,7 @@
     </Variable>
     <Variable>
       <Value>ups</Value>
-      <Name>NUT_ALIAS</Name>
+      <Name>UPS_NAME</Name>
       <Mode/>
     </Variable>
     <Variable>
@@ -103,7 +103,7 @@
   <Config Name="INFLUXDB_PASSWORD" Target="INFLUXDB_PASSWORD" Default="" Mode="" Description="Password for Influxdb" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
   <Config Name="NUT_HOST" Target="NUT_HOST" Default="127.0.0.1" Mode="" Description="NUT hostname" Type="Variable" Display="advanced" Required="true" Mask="false">127.0.0.1</Config>
   <Config Name="NUT_PORT" Target="NUT_PORT" Default="" Mode="" Description="NUT Port" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
-  <Config Name="NUT_ALIAS" Target="NUT_ALIAS" Default="ups" Mode="" Description="NUT Alias" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
+  <Config Name="UPS_NAME" Target="UPS_NAME" Default="ups" Mode="" Description="NUT UPS name" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
   <Config Name="NUT_USERNAME" Target="NUT_USERNAME" Default="" Mode="" Description="Username for NUT" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
   <Config Name="NUT_PASSWORD" Target="NUT_PASSWORD" Default="" Mode="" Description="Password for NUT" Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
   <Config Name="Debugging Output" Target="VERBOSE" Default="false" Mode="" Description="Set this variable to true to see the output in the docker log." Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
