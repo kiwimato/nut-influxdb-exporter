@@ -52,10 +52,14 @@ if ups_client:
 def convert_to_type(s):
     """ A function to convert a str to either integer or float. If neither, it will return the str. """
     try:
-        float_var = float(s)
-        return float_var
+        int_var = int(s)
+        return int_var
     except ValueError:
-        return s
+        try:
+            float_var = float(s)
+            return float_var
+        except ValueError:
+            return s
 
 
 def construct_object(data, remove_keys, tag_keys):
