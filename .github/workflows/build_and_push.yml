@@ -6,9 +6,6 @@ on:
     branches:
       - main
 
-env:
-  docker_tag: ${{ $GITHUB_REF == 'refs/heads/main' && echo "latest" || echo "test" }}
-
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
@@ -31,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: maihai/nut-influxdb-exporter:${{ docker_tag }}
+          tags: maihai/nut-influxdb-exporter:${{ $GITHUB_REF == 'refs/heads/main' && echo "latest" || echo "test" }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
