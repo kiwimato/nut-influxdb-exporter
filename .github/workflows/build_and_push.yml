@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: maihai/nut-influxdb-exporter:${{ $GITHUB_REF == 'refs/heads/main' && echo "latest" || echo "test" }}
+          tags: maihai/nut-influxdb-exporter:${{ env.GITHUB_REF == 'refs/heads/main' && 'latest' || 'test' }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
