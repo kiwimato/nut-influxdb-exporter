@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  docker_tag: ${{ env.GITHUB_REF == 'refs/heads/main' && echo "latest" || echo "test" }}
+  docker_tag: ${{ GITHUB_REF == 'refs/heads/main' && echo "latest" || echo "test" }}
 
 jobs:
   build_and_push:
