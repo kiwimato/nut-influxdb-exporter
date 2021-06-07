@@ -25,28 +25,11 @@ verbose = os.getenv('VERBOSE', 'false').lower()
 remove_keys = ['driver.version.internal', 'driver.version.usb', 'ups.beeper.status', 'driver.name', 'battery.mfr.date']
 tag_keys = ['battery.type', 'device.model', 'device.serial', 'driver.version', 'driver.version.data', 'device.mfr', 'device.type', 'ups.mfr', 'ups.model', 'ups.productid', 'ups.serial', 'ups.vendorid']
 
-print("Connecting to InfluxDB host:{}, DB:{}".format(host, dbname))
-client = InfluxDBClient(host, port, username, password, dbname)
-client.create_database(dbname)
-if client:
-    print("Connected successfully to InfluxDB")
 
-if os.getenv('VERBOSE', 'false').lower() == 'true':
-    print("INFLUXDB_DATABASE: ", dbname)
-    print("INFLUXDB_USER: ", username)
-    # print("INFLUXDB_PASSWORD: ", password)    # Not really safe to just print it. Feel free to uncomment this if you really need it
-    print("INFLUXDB_PORT: ", port)
-    print("INFLUXDB_HOST: ", host)
-    print("NUT_USER: ", nut_username)
-    # print("NUT_PASS: ", nut_password)
-    print("UPS_NAME", ups_name)
-    print("INTERVAL: ", interval)
-    print("VERBOSE: ", verbose)
-
-print("Connecting to NUT host {}:{}".format(nut_host, nut_port))
-ups_client = PyNUTClient(host=nut_host, port=nut_port, login=nut_username, password=nut_password, debug=(verbose == 'true'))
-if ups_client:
-    print("Connected successfully to NUT")
+def manage_database(dbname):
+    for db in client.get_list_database():
+        if dbname in db.get('name'):
+            return True
 
 
 def convert_to_type(s):
@@ -93,6 +76,38 @@ def construct_object(data, remove_keys, tag_keys):
     ]
     return result
 
+
+print("Connecting to InfluxDB host:{}, DB:{}".format(host, dbname))
+client = InfluxDBClient(host, port, username, password, dbname)
+if client:
+    print("Connected successfully to InfluxDB")
+
+if manage_database(dbname):
+    print("DB:{} already exists on host:{}, not creating".format(dbname, host))
+else:
+    try:
+        print("Creating DB:{} on host:{}".format(dbname, host))
+        client.create_database(dbname)
+    except Exception as e:
+        print(e)
+        raise
+
+if os.getenv('VERBOSE', 'false').lower() == 'true':
+    print("INFLUXDB_DATABASE: ", dbname)
+    print("INFLUXDB_USER: ", username)
+    # print("INFLUXDB_PASSWORD: ", password)    # Not really safe to just print it. Feel free to uncomment this if you really need it
+    print("INFLUXDB_PORT: ", port)
+    print("INFLUXDB_HOST: ", host)
+    print("NUT_USER: ", nut_username)
+    # print("NUT_PASS: ", nut_password)
+    print("UPS_NAME", ups_name)
+    print("INTERVAL: ", interval)
+    print("VERBOSE: ", verbose)
+
+print("Connecting to NUT host {}:{}".format(nut_host, nut_port))
+ups_client = PyNUTClient(host=nut_host, port=nut_port, login=nut_username, password=nut_password, debug=(verbose == 'true'))
+if ups_client:
+    print("Connected successfully to NUT")
 
 # Main infinite loop: Get the data from NUT every interval and send it to InfluxDB.
 while True:
