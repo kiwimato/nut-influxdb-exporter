@@ -79,6 +79,7 @@ def construct_object(data, remove_keys, tag_keys):
 
 print("Connecting to InfluxDB host:{}, DB:{}".format(host, dbname))
 client = InfluxDBClient(host, port, username, password, dbname)
+
 if client:
     print("Connected successfully to InfluxDB")
 
