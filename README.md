@@ -5,3 +5,6 @@ While some graphs might need some tweaking for your particular setup, it's bette
 
 You can find the docker image here:
 https://hub.docker.com/r/maihai/nut-influxdb-exporter
+
+# Contributions
+Please create a PR to `develop` branch since GitHub actions doesn't offer an easy way to pass secrets to PRs from forks yet.
