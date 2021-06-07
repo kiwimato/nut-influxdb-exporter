@@ -7,28 +7,20 @@ on:
       - main
 
 jobs:
-  build_and_push:
+  build:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      -
-        name: Login to DockerHub
-        uses: docker/login-action@v1
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: install buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: maihai/nut-influxdb-exporter:${{ env.GITHUB_REF == 'refs/heads/main' && 'latest' || 'test' }}
-      -
-        name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+          buildx-version: latest
+      - name: login to docker hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: build and push image
+        run: |
+          docker buildx build --push \
+            --tag maihai/nut-influxdb-exporter:${{ github.ref == 'refs/heads/main' && 'latest' || 'test' }} \
+            --platform linux/amd64 .
